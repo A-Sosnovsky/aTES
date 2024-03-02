@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using KafkaFlow;
 using KafkaFlow.Producers;
 
-namespace TasksService.Services;
+namespace TasksService.Services.Events;
 
 internal sealed class EventsService : IEventsService
 {
@@ -13,7 +14,7 @@ internal sealed class EventsService : IEventsService
         _producer = producerAccessor.GetProducer("say-hello");
     }
 
-    public async Task TaskCreated()
+    public async Task TaskCreated(Guid taskPublicId, Guid taskAssignedToId, string description)
     {
         await _producer.ProduceAsync("sample-topic", new { Message = "TaskCreated" });
     }

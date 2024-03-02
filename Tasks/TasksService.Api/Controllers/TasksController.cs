@@ -10,6 +10,8 @@ using TaskStatus = TasksService.DAL.Context.TaskStatus;
 using Task = System.Threading.Tasks.Task;
 using TasksService.Api.Models;
 using TasksService.Services;
+using TasksService.Services.Events;
+using TasksService.Services.Tasks;
 
 namespace TasksService.Api.Controllers;
 
@@ -21,12 +23,14 @@ public class TasksController : ControllerBase
     private readonly IRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEventsService _eventsService;
+    private readonly ITasksService _tasksService;
 
-    public TasksController(IRepository repository, IUnitOfWork unitOfWork, IEventsService eventsService)
+    public TasksController(IRepository repository, IUnitOfWork unitOfWork, IEventsService eventsService, ITasksService tasksService)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _eventsService = eventsService;
+        _tasksService = tasksService;
     }
 
     [HttpGet]
@@ -37,35 +41,18 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<int> Create(CreateTaskModel model, CancellationToken cancellationToken)
+    public async Task Create(CreateTaskModel model, CancellationToken cancellationToken)
     {
-        var task = new DAL.Context.Task
-        {
-            AssignedToId = model.AssignedToId,
-            Description = model.Description,
-            Status = TaskStatus.Assigned
-        };
-        await _repository.InsertAsync(task, cancellationToken);
-
-        await _unitOfWork.Commit(cancellationToken);
-        await _eventsService.TaskCreated();
-        return 1;
+        await _tasksService.CreateTask(model.Description, cancellationToken);
     }
 
+    [HttpPut("{id:int}/done")]
     public async Task Done(int id, CancellationToken cancellationToken)
     {
-        var task = await _repository.Query<DAL.Context.Task>().FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
-        if (task == null)
-        {
-            throw new InvalidOperationException("Task not found");
-        }
-
-        task.Status = TaskStatus.Completed;
-        _repository.Update(task, cancellationToken);
-        await _unitOfWork.Commit(cancellationToken);
-        await _eventsService.TaskCompleted();
+        await _tasksService.CompleteTask(id, cancellationToken);
     }
 
+    [HttpPost("assign")]
     public async Task AssignTasks(CancellationToken cancellationToken)
     {
         await _eventsService.TaskAssigned();

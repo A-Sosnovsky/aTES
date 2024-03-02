@@ -18,4 +18,8 @@
     <ProjectReference Include="..\TasksService.Services\TasksService.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BackgroundServices\" />
+  </ItemGroup>
+
 </Project>

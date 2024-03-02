@@ -12,12 +12,11 @@ public class Task : IDbEntity
     [Column("id")]
     public int Id { get; set; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("public_id")]
     public Guid PublicId { get; set; }
 
     [Column("description")]
-    public string Description { get; set; } = null!;
+    public required string Description { get; set; } = null!;
 
     [Column("status")]
     public TaskStatus Status { get; set; }

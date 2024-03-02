@@ -6,5 +6,5 @@ namespace TasksService.DAL;
 
 public interface IUnitOfWork : IDisposable, IAsyncDisposable
 {
-    Task<int> Commit(CancellationToken cancellationToken);
+    Task<int> Commit(CancellationToken cancellationToken = default);
 }
