@@ -53,7 +53,10 @@ public static class ServiceCollectionExtensions
                                     h.AddHandler<UserCreatedEventsHandler>()
                                         .AddHandler<UserDeletedEventsHandler>()
                                         .AddHandler<UserRoleChangedEventsHandler>()
-                                        .WhenNoHandlerFound(context => { Console.WriteLine($"No handler found for message: {context.Message}"); })
+                                        .WhenNoHandlerFound(context =>
+                                        {
+                                            Console.WriteLine($"No handler found for message: {context.Message}");
+                                        })
                                 )
                             )
                         )

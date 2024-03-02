@@ -1,5 +1,7 @@
+using System;
 using Contract.Dto.Events.Users;
 using KafkaFlow;
+using Microsoft.Extensions.DependencyInjection;
 using TasksService.DAL;
 using TasksService.DAL.Context;
 using Task = System.Threading.Tasks.Task;
@@ -8,23 +10,24 @@ namespace TasksService.Services.EventHandlers;
 
 public class UserCreatedEventsHandler : IMessageHandler<UserCreated>
 {
-    private readonly IRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IServiceProvider _serviceProvider;
     
-    public UserCreatedEventsHandler(IRepository repository, IUnitOfWork unitOfWork)
+    public UserCreatedEventsHandler(IServiceProvider serviceProvider)
     {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
+        _serviceProvider = serviceProvider;
     }
 
     public async Task Handle(IMessageContext context, UserCreated message)
     {
-        await _repository.InsertAsync(new User
+        using var scope = _serviceProvider.CreateScope();
+        var repository = scope.ServiceProvider.GetRequiredService<IRepository>();
+        await using var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        await repository.InsertAsync(new User
         {
             Id = message.Id,
             Name = message.Name
         });
         
-        await _unitOfWork.Commit();
+        await unitOfWork.Commit();
     }
 }
