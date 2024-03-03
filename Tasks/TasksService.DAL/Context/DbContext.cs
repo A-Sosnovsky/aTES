@@ -29,9 +29,10 @@ public class TasksDbContext : DbContext
         {
             optionsBuilder.UseNpgsql(_configuration?.GetConnectionString("TasksDb"));
         }
+
+        optionsBuilder.LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name });
     }
 
     public DbSet<Task> Tasks { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
-    public DbSet<UserRole> UserRoles { get; set; } = null!;
 }

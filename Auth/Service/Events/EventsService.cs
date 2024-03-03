@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Contract.Dto.Events.Users;
-using JwtRoleAuthentication.Services;
 using KafkaFlow;
 using KafkaFlow.Producers;
 

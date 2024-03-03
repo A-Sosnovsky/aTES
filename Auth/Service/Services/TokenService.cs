@@ -58,9 +58,8 @@ public class TokenService
                 new (JwtRegisteredClaimNames.Sub, jwtSub),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new (JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
-                new (ClaimTypes.NameIdentifier, user.Id),
+                new (ClaimTypes.Sid, user.PublicId.ToString()),
                 new (ClaimTypes.Name, user.UserName),
-                new (ClaimTypes.Email, user.Email),
             };
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             

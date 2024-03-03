@@ -1,14 +1,13 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Contract.Dto.References;
 using JwtRoleAuthentication.Data;
-using JwtRoleAuthentication.Enums;
 using JwtRoleAuthentication.Events;
 using JwtRoleAuthentication.Models;
 using JwtRoleAuthentication.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace JwtRoleAuthentication.Controllers;
 
@@ -17,18 +16,16 @@ namespace JwtRoleAuthentication.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IEventsService _eventsService;
     private readonly ApplicationDbContext _context;
     private readonly TokenService _tokenService;
 
     public UsersController(UserManager<ApplicationUser> userManager, ApplicationDbContext context,
-        TokenService tokenService, ILogger<UsersController> logger, RoleManager<IdentityRole> roleManager, IEventsService eventsService)
+        TokenService tokenService, IEventsService eventsService)
     {
         _userManager = userManager;
         _context = context;
         _tokenService = tokenService;
-        _roleManager = roleManager;
         _eventsService = eventsService;
     }
 
@@ -53,7 +50,7 @@ public class UsersController : ControllerBase
 
         if (result.Succeeded)
         {
-            var role = Roles.Popug.ToString();
+            var role = Roles.Popug;
             await _userManager.AddToRoleAsync(user, role);
             await _eventsService.UserCreated(user.PublicId, user.UserName!, [role]);
             request.Password = "";
@@ -112,9 +109,8 @@ public class UsersController : ControllerBase
         });
     }
 
-
     [HttpPost("{email}")]
-    public async Task<ActionResult> SetUserRole([FromRoute] string email, [FromBody] Roles[] roles)
+    public async Task<ActionResult> SetUserRole([FromRoute] string email, [FromBody] string[] roles)
     {
         var managedUser = await _userManager.FindByEmailAsync(email);
 
@@ -123,7 +119,7 @@ public class UsersController : ControllerBase
             return NotFound("User not found");
         }
 
-        if (!roles.Any())
+        if (roles.Length == 0)
         {
             return BadRequest("Role");
         }

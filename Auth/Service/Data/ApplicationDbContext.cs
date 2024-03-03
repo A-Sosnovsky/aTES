@@ -1,5 +1,3 @@
-using System;
-using JwtRoleAuthentication.Enums;
 using JwtRoleAuthentication.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

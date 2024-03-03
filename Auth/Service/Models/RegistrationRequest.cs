@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using JwtRoleAuthentication.Enums;
 
 namespace JwtRoleAuthentication.Models;
 
@@ -14,5 +13,6 @@ public class RegistrationRequest
     [Required]
     public string? Password { get; set; }
 
-    public Roles Roles { get; set; } = Roles.Popug;
+    [Required]
+    public string Role { get; set; } = Contract.Dto.References.Roles.Popug;
 }

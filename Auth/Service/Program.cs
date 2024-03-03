@@ -2,8 +2,8 @@ using System;
 using System.Text;
 using System.Text.Json.Serialization;
 using Contract.Dto;
+using Contract.Dto.References;
 using JwtRoleAuthentication.Data;
-using JwtRoleAuthentication.Enums;
 using JwtRoleAuthentication.Events;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -114,15 +114,12 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = validIssuer,
             ValidAudience = validAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(symmetricSecurityKey)
-            ),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricSecurityKey!)),
         };
     });
 
 // Build the app
 var app = builder.Build();
-
 using (var scope = app.Services.CreateScope())
 {
     await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.MigrateAsync();
@@ -130,7 +127,7 @@ using (var scope = app.Services.CreateScope())
     var hasRoles = await roleManager.Roles.AnyAsync();
     if (!hasRoles)
     {
-        foreach (var name in Enum.GetNames<Roles>())
+        foreach (var name in Roles.All)
         {
             await roleManager.CreateAsync(new IdentityRole(name));
         }
