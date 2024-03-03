@@ -12,7 +12,7 @@ namespace TasksService.Services;
 public static class ServiceCollectionExtensions
 {
     private const string ServiceName = "tasks-service";
-    private static readonly string TopicName = Constants.TasksTopicName;
+    private static readonly string TopicName = Constants.TasksStreamTopicName;
     private static readonly string[] BrokenAddress = ["localhost:9092"];
 
     public static IServiceCollection AddEventsService(this IServiceCollection services)
@@ -39,11 +39,12 @@ public static class ServiceCollectionExtensions
                                 .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>())
                         )
                 )
+                // users stream consumer
                 .AddCluster(
                     cluster => cluster
                         .WithBrokers(BrokenAddress)
                         .AddConsumer(consumer => consumer
-                            .Topic(Constants.UsersTopicName)
+                            .Topic(Constants.UsersStreamTopicName)
                             .WithGroupId(ServiceName)
                             .WithBufferSize(100)
                             .WithWorkersCount(1)

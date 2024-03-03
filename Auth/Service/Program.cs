@@ -162,10 +162,10 @@ void AddKafka(IServiceCollection services)
             .AddCluster(
                 cluster => cluster
                     .WithBrokers(brokenAddress)
-                    .CreateTopicIfNotExists(Constants.UsersTopicName, 1, 1)
+                    .CreateTopicIfNotExists(Constants.UsersStreamTopicName, 1, 1)
                     .AddProducer(serviceName,
                         producer => producer
-                            .DefaultTopic(Constants.UsersTopicName)
+                            .DefaultTopic(Constants.UsersStreamTopicName)
                             .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>())
                     )
             )
