@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using Contract.Dto.Events.Users;
 using KafkaFlow;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TasksService.DAL;
 using TasksService.DAL.Context;
@@ -22,12 +24,9 @@ public class UserRoleChangedEventsHandler : IMessageHandler<UserRoleChanged>
         using var scope = _serviceProvider.CreateScope();
         var repository = scope.ServiceProvider.GetRequiredService<IRepository>();
         await using var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-        // await repository.InsertAsync(new User
-        // {
-        //     Id = message.Id,
-        //     Name = message.Name
-        // });
-        
-        // await unitOfWork.Commit();
+        var user = await repository.Query<User>().Where(u => u.Id == message.Id).FirstAsync();
+        user.Roles = message.Roles;
+        repository.Update(user);
+        await unitOfWork.Commit();
     }
 }

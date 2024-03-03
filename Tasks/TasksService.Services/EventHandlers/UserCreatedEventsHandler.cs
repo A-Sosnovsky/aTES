@@ -25,7 +25,8 @@ public class UserCreatedEventsHandler : IMessageHandler<UserCreated>
         await repository.InsertAsync(new User
         {
             Id = message.Id,
-            Name = message.Name
+            Name = message.Name,
+            Roles = message.Roles
         });
         
         await unitOfWork.Commit();

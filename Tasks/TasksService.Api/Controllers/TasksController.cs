@@ -1,43 +1,36 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TasksService.DAL;
-using TaskStatus = TasksService.DAL.Context.TaskStatus;
 using Task = System.Threading.Tasks.Task;
 using TasksService.Api.Models;
-using TasksService.Services;
-using TasksService.Services.Events;
 using TasksService.Services.Tasks;
 
 namespace TasksService.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-
+[Authorize]
 public class TasksController : ControllerBase
 {
-    private readonly IRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IEventsService _eventsService;
     private readonly ITasksService _tasksService;
+    private readonly ITasksProvider _tasksProvider;
 
-    public TasksController(IRepository repository, IUnitOfWork unitOfWork, IEventsService eventsService, ITasksService tasksService)
+    public TasksController(ITasksService tasksService, ITasksProvider tasksProvider)
     {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
-        _eventsService = eventsService;
         _tasksService = tasksService;
+        _tasksProvider = tasksProvider;
     }
 
     [HttpGet]
-    public async Task<IEnumerable<Models.Task>> Get(CancellationToken cancellationToken)
+    public async IAsyncEnumerable<Models.Task> Get([EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var tasks = await _repository.Query<DAL.Context.Task>().ToListAsync(cancellationToken);
-        return tasks.Select(t => new Models.Task(t.Id, t.Description, t.Status));
+        var tasks = _tasksProvider.GetAssignedTasks(this.GetUserId(), cancellationToken);
+        await foreach (var task in tasks)
+        {
+            yield return new Models.Task(task.Id, task.Description, task.Status);
+        }
     }
 
     [HttpPost]
@@ -49,12 +42,12 @@ public class TasksController : ControllerBase
     [HttpPut("{id:int}/done")]
     public async Task Done(int id, CancellationToken cancellationToken)
     {
-        await _tasksService.CompleteTask(id, cancellationToken);
+        await _tasksService.CompleteTask(id, this.GetUserId(), cancellationToken);
     }
 
     [HttpPost("assign")]
     public async Task AssignTasks(CancellationToken cancellationToken)
     {
-        await _eventsService.TaskAssigned();
+        await _tasksService.AssignTasks(this.GetUserId(), cancellationToken);
     }
 }

@@ -8,7 +8,7 @@ using TasksService.DAL.Context;
 
 #nullable disable
 
-namespace TasksService.DAL.Migrations
+namespace TasksService.DAL.Data.Migrations
 {
     [DbContext(typeof(TasksDbContext))]
     partial class TasksDbContextModelSnapshot : ModelSnapshot
@@ -67,24 +67,14 @@ namespace TasksService.DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    b.Property<string[]>("Roles")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("roles");
+
                     b.HasKey("Id");
 
                     b.ToTable("users");
-                });
-
-            modelBuilder.Entity("TasksService.DAL.Context.UserRole", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer")
-                        .HasColumnName("role");
-
-                    b.HasKey("UserId", "Role");
-
-                    b.ToTable("user_roles");
                 });
 
             modelBuilder.Entity("TasksService.DAL.Context.Task", b =>
@@ -96,20 +86,6 @@ namespace TasksService.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("AssignedTo");
-                });
-
-            modelBuilder.Entity("TasksService.DAL.Context.UserRole", b =>
-                {
-                    b.HasOne("TasksService.DAL.Context.User", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TasksService.DAL.Context.User", b =>
-                {
-                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

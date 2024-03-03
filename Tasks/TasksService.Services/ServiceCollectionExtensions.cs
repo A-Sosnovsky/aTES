@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IEventsService, EventsService>();
         services.AddScoped<ITasksService, Tasks.TasksService>();
+        services.AddScoped<ITasksProvider, TasksProvider>();
         AddKafka(services);
         return services;
     }

@@ -15,5 +15,6 @@ public class User : IDbEntity
     [Column("name")]
     public string Name { get; set; } = null!;
 
-    public IEnumerable<UserRole> Roles { get; set; } = null!;
+    [Column("roles")]
+    public string[] Roles { get; set; }
 }

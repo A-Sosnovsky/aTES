@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace TasksService.DAL.Migrations
+namespace TasksService.DAL.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -17,7 +17,8 @@ namespace TasksService.DAL.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false)
+                    name = table.Column<string>(type: "text", nullable: false),
+                    roles = table.Column<string[]>(type: "text[]", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,24 +47,6 @@ namespace TasksService.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "user_roles",
-                columns: table => new
-                {
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    role = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_user_roles", x => new { x.user_id, x.role });
-                    table.ForeignKey(
-                        name: "FK_user_roles_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_tasks_assigned_to_id",
                 table: "tasks",
@@ -75,9 +58,6 @@ namespace TasksService.DAL.Migrations
         {
             migrationBuilder.DropTable(
                 name: "tasks");
-
-            migrationBuilder.DropTable(
-                name: "user_roles");
 
             migrationBuilder.DropTable(
                 name: "users");
