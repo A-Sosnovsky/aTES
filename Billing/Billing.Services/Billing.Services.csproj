@@ -15,4 +15,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\SchemaRegistry\Contract.Dto.csproj" />
+    <ProjectReference Include="..\Billing.Dal\Billing.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

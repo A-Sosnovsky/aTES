@@ -35,4 +35,5 @@ public class TasksDbContext : DbContext
 
     public DbSet<Task> Tasks { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
+    public DbSet<MessageQueue> OutboxQueueItems { get; set; } = null!;
 }

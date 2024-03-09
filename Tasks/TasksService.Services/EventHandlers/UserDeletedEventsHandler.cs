@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Contract.Dto.Events.Users;
+using Contract.Dto.Events.Users.Deleted;
 using KafkaFlow;
 
 namespace TasksService.Services.EventHandlers;

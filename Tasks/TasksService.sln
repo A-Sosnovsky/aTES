@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TasksService.DAL", "TasksSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TasksService.Services", "TasksService.Services\TasksService.Services.csproj", "{948B8CC4-5BB9-45ED-AF7F-D684D854F29A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract.Dto", "Contract.Dto\Contract.Dto.csproj", "{78C9F8FD-6692-4CD3-AFD8-7BE6D00FDF63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract.Dto", "..\SchemaRegistry\Contract.Dto.csproj", "{78C9F8FD-6692-4CD3-AFD8-7BE6D00FDF63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

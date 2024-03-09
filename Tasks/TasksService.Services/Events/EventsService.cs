@@ -1,45 +1,60 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Contract.Dto.Events.Tasks;
-using KafkaFlow;
-using KafkaFlow.Producers;
+using System.Text.Json;
+using Contract.Dto.Events.Tasks.Assigned;
+using Contract.Dto.Events.Tasks.Completed;
+using Contract.Dto.Events.Tasks.Created.V1;
+using TasksService.DAL;
+using TasksService.DAL.Context;
+using Task = System.Threading.Tasks.Task;
 
 namespace TasksService.Services.Events;
 
 internal sealed class EventsService : IEventsService
 {
-    private readonly IMessageProducer _producer;
-
-    public EventsService(IProducerAccessor producerAccessor)
+    private readonly IRepository _repository;
+    
+    public EventsService(IRepository repository)
     {
-        _producer = producerAccessor.GetProducer("tasks-service");
+        _repository = repository;
     }
 
     public async Task TaskCreated(Guid taskPublicId, Guid taskAssignedToId, string description)
     {
-        await _producer.ProduceAsync("task_created", new TaskCreated
+        await _repository.InsertAsync(new MessageQueue
         {
-            Id = taskPublicId,
-            AssignedToId = taskAssignedToId,
-            Description = description,
+            Type = MessageQueueType.TaskCreated,
+            Value = JsonSerializer.Serialize(new TaskCreated
+            {
+                Id = taskPublicId,
+                AssignedToId = taskAssignedToId,
+                Description = description,
+            })
         });
     }
 
     public async Task TaskCompleted(Guid taskPublicId, Guid taskCompletedById)
     {
-        await _producer.ProduceAsync("task_completed", new TaskCompleted
+        await _repository.InsertAsync(new MessageQueue
         {
-            Id = taskPublicId,
-            CompletedBy = taskCompletedById
+            Type = MessageQueueType.TaskCompleted,
+            Value = JsonSerializer.Serialize(new TaskCompleted
+            {
+                Id = taskPublicId,
+                CompletedBy = taskCompletedById
+            })
         });
     }
 
     public async Task TaskAssigned(Guid taskPublicId, Guid taskAssignedToId)
     {
-        await _producer.ProduceAsync("task_assigned", new TaskAssigned
+        await _repository.InsertAsync(new MessageQueue
         {
-            Id = taskPublicId,
-            AssignedToId = taskAssignedToId
+            Type = MessageQueueType.TaskAssigned,
+            Value = JsonSerializer.Serialize(new TaskAssigned
+            {
+                Id = taskPublicId,
+                AssignedToId = taskAssignedToId
+            })
         });
     }
 }

@@ -29,10 +29,10 @@
 
     <ItemGroup>
       <Folder Include="Data\Migrations\" />
-      <Folder Include="Enums\" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\SchemaRegistry\Contract.Dto.csproj" />
       <ProjectReference Include="..\Contract.Dto\Contract.Dto.csproj" />
     </ItemGroup>
 

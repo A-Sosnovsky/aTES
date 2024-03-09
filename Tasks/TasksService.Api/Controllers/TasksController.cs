@@ -36,7 +36,7 @@ public class TasksController : ControllerBase
     [HttpPost]
     public async Task Create(CreateTaskModel model, CancellationToken cancellationToken)
     {
-        await _tasksService.CreateTask(model.Description, cancellationToken);
+        await _tasksService.CreateTask(model.JiraId, model.Description, cancellationToken);
     }
 
     [HttpPut("{id:int}/done")]

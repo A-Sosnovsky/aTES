@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Contract.Dto.Events.Users;
+using Contract.Dto.Events.Users.RoleChanged;
 using KafkaFlow;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

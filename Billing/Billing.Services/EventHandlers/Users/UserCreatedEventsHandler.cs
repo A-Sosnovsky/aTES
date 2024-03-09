@@ -1,0 +1,34 @@
+using System;
+using Billing.DAL;
+using Billing.DAL.Context;
+using Contract.Dto.Events.Users.Created;
+using KafkaFlow;
+using Microsoft.Extensions.DependencyInjection;
+using Task = System.Threading.Tasks.Task;
+
+namespace Billing.Services.EventHandlers.Users;
+
+public class UserCreatedEventsHandler : IMessageHandler<UserCreated>
+{
+    private readonly IServiceProvider _serviceProvider;
+    
+    public UserCreatedEventsHandler(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public async Task Handle(IMessageContext context, UserCreated message)
+    {
+        using var scope = _serviceProvider.CreateScope();
+        var repository = scope.ServiceProvider.GetRequiredService<IRepository>();
+        await using var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        await repository.InsertAsync(new User
+        {
+            Id = message.Id,
+            Name = message.Name,
+            Roles = message.Roles
+        });
+        
+        await unitOfWork.Commit();
+    }
+}

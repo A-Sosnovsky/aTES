@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TaskCreatedV2",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "jira_id": {
+      "type": "string"
+    },
+    "assigned_to": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": ["id", "jira_id", "assigned_to", "description"]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TaskCompleted",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "completed_by": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": ["id", "completed_by"]
+}
