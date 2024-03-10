@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using TasksService.DAL.Context;
 using Task = System.Threading.Tasks.Task;
@@ -24,8 +25,18 @@ internal sealed class Repository : IRepository
         await _dbDbContext.AddAsync(entity, cancellationToken);
     }
 
+    public async Task InsertBatchAsync<T>(IEnumerable<T> entity, CancellationToken cancellationToken) where T : class, IDbEntity
+    {
+        await _dbDbContext.AddRangeAsync(entity, cancellationToken);
+    }
+    
     public void Update<T>(T entity, CancellationToken cancellationToken) where T : class, IDbEntity
     {
         _dbDbContext.Update(entity);
+    }
+
+    public void Delete<T>(T entity, CancellationToken cancellationToken = default) where T : class, IDbEntity
+    {
+        _dbDbContext.Remove(entity);
     }
 }

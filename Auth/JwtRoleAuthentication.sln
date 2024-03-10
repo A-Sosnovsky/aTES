@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtRoleAuthentication", "Service\JwtRoleAuthentication.csproj", "{D11B1FCE-97C3-413C-817B-A2861F0AEC5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract.Dto", "Contract.Dto\Contract.Dto.csproj", "{4E8B7938-6CEB-46B0-B544-8356700EE76E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract.Dto", "..\SchemaRegistry\Contract.Dto.csproj", "{4E8B7938-6CEB-46B0-B544-8356700EE76E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

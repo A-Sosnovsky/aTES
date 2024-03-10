@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Contract.Dto\Contract.Dto.csproj" />
+    <ProjectReference Include="..\..\SchemaRegistry\Contract.Dto.csproj" />
     <ProjectReference Include="..\TasksService.DAL\TasksService.DAL.csproj" />
   </ItemGroup>
 

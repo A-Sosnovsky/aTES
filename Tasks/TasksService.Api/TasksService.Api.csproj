@@ -16,12 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SchemaRegistry\Contract.Dto.csproj" />
     <ProjectReference Include="..\TasksService.DAL\TasksService.DAL.csproj" />
     <ProjectReference Include="..\TasksService.Services\TasksService.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="BackgroundServices\" />
   </ItemGroup>
 
 </Project>

@@ -22,6 +22,29 @@ namespace TasksService.DAL.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("TasksService.DAL.Context.MessageQueue", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("outbox_queue");
+                });
+
             modelBuilder.Entity("TasksService.DAL.Context.Task", b =>
                 {
                     b.Property<int>("Id")
@@ -39,6 +62,11 @@ namespace TasksService.DAL.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
+
+                    b.Property<string>("JiraId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("jira_id");
 
                     b.Property<Guid>("PublicId")
                         .HasColumnType("uuid")

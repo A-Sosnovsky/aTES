@@ -1,5 +1,5 @@
 ﻿using System;
-using Contract.Dto.Events;
+using Contract.Dto;
 using KafkaFlow;
 using KafkaFlow.Serializer;
 using Microsoft.Extensions.DependencyInjection;

@@ -27,20 +27,26 @@ internal sealed class TasksService : ITasksService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task CreateTask(string description, CancellationToken cancellationToken)
+    public async Task CreateTask(string jiraId, string description, CancellationToken cancellationToken)
     {
+        if (jiraId.Contains('[') || jiraId.Contains(']'))
+        {
+            throw new InvalidOperationException("JiraId contains invalid characters");
+        }
+
         var assignedToId = await GetRandomPopugId(cancellationToken);
         var task = new DAL.Context.Task
         {
+            JiraId = jiraId,
             PublicId = Guid.NewGuid(),
             AssignedToId = assignedToId,
             Description = description,
-            Status = DAL.Context.TaskStatus.Assigned
+            Status = TaskStatus.Assigned
         };
 
         await _repository.InsertAsync(task, cancellationToken);
-        await _unitOfWork.Commit(cancellationToken);
         await _eventsService.TaskCreated(task.PublicId, task.AssignedToId, description);
+        await _unitOfWork.Commit(cancellationToken);
     }
 
     public async Task CompleteTask(int id, Guid userId, CancellationToken cancellationToken)
@@ -60,11 +66,11 @@ internal sealed class TasksService : ITasksService
         {
             throw new InvalidOperationException("Task already completed");
         }
-        
+
         task.Status = TaskStatus.Completed;
         _repository.Update(task, cancellationToken);
-        await _unitOfWork.Commit(cancellationToken);
         await _eventsService.TaskCompleted(task.PublicId, userId);
+        await _unitOfWork.Commit(cancellationToken);
     }
 
     public async Task AssignTasks(Guid userId, CancellationToken cancellationToken)
@@ -80,8 +86,8 @@ internal sealed class TasksService : ITasksService
         foreach (var openedTask in openedTasks)
         {
             openedTask.AssignedToId = await GetRandomPopugId(cancellationToken);
-            await _unitOfWork.Commit(cancellationToken);
             await _eventsService.TaskAssigned(openedTask.PublicId, openedTask.AssignedToId);
+            await _unitOfWork.Commit(cancellationToken);
         }
     }
 

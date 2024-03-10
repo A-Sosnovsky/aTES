@@ -25,4 +25,7 @@ public class Task : IDbEntity
     public Guid AssignedToId { get; set; }
     
     public User AssignedTo { get; set; } = null!;
+    
+    [Column("jira_id")]
+    public required string JiraId { get; set; }
 }

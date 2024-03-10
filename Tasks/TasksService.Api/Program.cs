@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TasksService.Api.BackgroundServices;
 using TasksService.DAL;
 using TasksService.Services;
 
@@ -18,7 +19,10 @@ builder.Services
     .AddDal()
     .AddEventsService()
     .AddControllers();
-            
+
+builder.Services.AddHostedService<TaskJiraIdGenerateService>();
+builder.Services.AddHostedService<EventsSendService>();
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

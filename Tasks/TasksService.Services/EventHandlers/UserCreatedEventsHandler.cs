@@ -1,5 +1,5 @@
 using System;
-using Contract.Dto.Events.Users;
+using Contract.Dto.Events.Users.Created;
 using KafkaFlow;
 using Microsoft.Extensions.DependencyInjection;
 using TasksService.DAL;
