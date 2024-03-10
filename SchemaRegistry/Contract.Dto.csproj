@@ -15,25 +15,10 @@
       <None Update="Events\**\Schema.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Events\Tasks\Assigned\Schema.json">
+      <None Update="Events\Transactions\Completed\Schema.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Events\Tasks\Completed\Schema.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Events\Users\Created\Schema.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Events\Users\Deleted\Schema.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Events\Users\RoleChanged\Schema.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Events\Tasks\Created\V2\Schema.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Events\Tasks\Created\V1\Schema.json">
+      <None Update="Events\Billing\AccountCreated\Schema.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

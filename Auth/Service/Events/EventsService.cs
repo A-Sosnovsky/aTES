@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Contract.Dto.Events.V1.Users;
+using Contract.Dto.Events.Users.Created;
+using Contract.Dto.Events.Users.RoleChanged;
 using KafkaFlow;
 using KafkaFlow.Producers;
 

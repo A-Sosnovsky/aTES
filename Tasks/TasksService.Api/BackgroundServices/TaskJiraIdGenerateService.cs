@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
-using Contract.Dto.Events.Tasks.Created.V2;
+using Contract.Dto.Events.Tasks.Updated;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -53,14 +53,13 @@ public class TaskJiraIdGenerateService : BackgroundService
 
                 await repository.InsertAsync(new MessageQueue
                 {
-                    Value = JsonSerializer.Serialize(new TaskCreated
+                    Value = JsonSerializer.Serialize(new TaskUpdated
                     {
                         Id = task.PublicId,
-                        AssignedToId = task.AssignedToId,
                         Description = task.Description,
                         JiraId = task.JiraId,
                     }),
-                    Type = MessageQueueType.TaskCreated
+                    Type = MessageQueueType.TaskUpdated
                 }, stoppingToken);
             }
 

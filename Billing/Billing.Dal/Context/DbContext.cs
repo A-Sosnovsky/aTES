@@ -8,6 +8,12 @@ public class BillingDbContext : DbContext
 {
     private readonly IConfiguration? _configuration;
 
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Account> Accounts { get; set; } = null!;
+    public DbSet<Transaction> Transactions { get; set; } = null!;
+    public DbSet<BillingCycle> BillingCycles { get; set; } = null!;
+    public DbSet<Task> Tasks { get; set; } = null!;
+    
     public BillingDbContext()
     {
         
@@ -33,4 +39,11 @@ public class BillingDbContext : DbContext
         optionsBuilder.LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name });
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<BillingCycle>()
+            .HasIndex(bc => bc.Status)
+            .HasFilter($"{nameof(BillingCycle.Status)} = '{(int)BillingCycleStatus.Active}'")
+            .IsUnique();
+    }
 }

@@ -33,7 +33,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\SchemaRegistry\Contract.Dto.csproj" />
-      <ProjectReference Include="..\Contract.Dto\Contract.Dto.csproj" />
     </ItemGroup>
 
 </Project>

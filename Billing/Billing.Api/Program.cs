@@ -8,12 +8,17 @@ using Billing.DAL;
 using Billing.Services;
 using Microsoft.OpenApi.Models;
 using System.Linq;
+using Billing.Api.BackgroundJobs;
 using KafkaFlow;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDal().AddEventsService();
+builder.Services.AddScheduler(schedulerBuilder =>
+{
+    schedulerBuilder.AddJob<BillingCycleCalculationJob>("0 0 * * *");
+});
 
 builder.Services.AddControllers();
 

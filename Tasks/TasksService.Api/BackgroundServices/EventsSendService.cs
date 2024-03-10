@@ -5,6 +5,7 @@ using Contract.Dto;
 using Contract.Dto.Events.Tasks.Assigned;
 using Contract.Dto.Events.Tasks.Completed;
 using Contract.Dto.Events.Tasks.Created.V2;
+using Contract.Dto.Events.Tasks.Updated;
 using KafkaFlow.Producers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,6 +57,11 @@ public class EventsSendService : BackgroundService
                         await SchemaValidator.Validate<TaskCompleted>(item.Value);
                         await producer.ProduceAsync("task_completed", item.Value);
                         break;
+                    case MessageQueueType.TaskUpdated:
+                        await SchemaValidator.Validate<TaskUpdated>(item.Value);
+                        await producer.ProduceAsync("task_updated", item.Value);
+                        break;
+                    
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
